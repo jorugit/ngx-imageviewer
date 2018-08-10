@@ -182,10 +182,10 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
       this._resource = this._pdfResource;
     }
     if (this._resource) {
-      this._resource.src = this.src instanceof File ? URL.createObjectURL(this.src) : this.src;
+      this._resource.src = (this.src instanceof File || Blob.prototype.isPrototypeOf(this.src)) ? URL.createObjectURL(this.src) : this.src;
       this._resourceChangeSub = this._resource.onResourceChange().subscribe(() => {
         this.updateCanvas();
-        if (this.src instanceof File) {
+        if ((this.src instanceof File || Blob.prototype.isPrototypeOf(this.src))) {
           URL.revokeObjectURL(this._resource.src);
         }
       });
@@ -498,6 +498,13 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
 
 function testFile(file: string | File, regexTest: string) {
   if (!file) { return false; }
-  const name = file instanceof File ? file.name : file;
+  let name = '';
+  if (file instanceof File) {
+    name = file.name;
+  } else if (Blob.prototype.isPrototypeOf(file)) {
+    name = (<any>file).name;
+  } else {
+    name = file;
+  }
   return name.toLowerCase().match(regexTest) !== null;
 }

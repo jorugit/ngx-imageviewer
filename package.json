@@ -85,7 +85,7 @@
       {
         "path": "@semantic-release/github",
         "assets": [
-          "dist/ngx-imageviewer.tgz"
+          "dist/lib/ngx-imageviewer.tgz"
         ]
       }
     ]
@@ -96,6 +96,8 @@
     }
   },
   "greenkeeper": {
-    "ignore": ["typescript"]
+    "ignore": [
+      "typescript"
+    ]
   }
 }
